@@ -40,7 +40,7 @@ VALUES (
     'Doe',
     'JD21',
     'JD21@hartford.edu',
-    AES_ENCRYPT('myUHARTPassword',@UNHEXEncryptionKey),  
+    AES_ENCRYPT('myUHARTPassword',@UNHEXEncryptionKey),
     'New UHART account for John'
 )
 ,
@@ -51,7 +51,7 @@ VALUES (
     'Jackson',
     'MJ84',
     'MJ84@yahoo.com',
-    AES_ENCRYPT('MJpassword',@UNHEXEncryptionKey), 
+    AES_ENCRYPT('MJpassword',@UNHEXEncryptionKey),
     'New account for Michael on the useless website'
 )
 ,
@@ -62,7 +62,7 @@ VALUES (
     'Homer',
     'JoeH',
     'JoeH@gmail.com',
-    AES_ENCRYPT('fffmJoelPW',@UNHEXEncryptionKey), 
+    AES_ENCRYPT('fffmJoelPW',@UNHEXEncryptionKey),
     'New account for Joel on the fast food for me website'
 )
 ,
@@ -73,7 +73,7 @@ VALUES (
     'Parker',
     'ManPark1998',
     'ManPark@gmail.com',
-    AES_ENCRYPT('MannyPark1212',@UNHEXEncryptionKey), 
+    AES_ENCRYPT('MannyPark1212',@UNHEXEncryptionKey),
     'New account for Manny on the Roblox website'
 )
 ,
@@ -84,7 +84,7 @@ VALUES (
     'Taylor',
     'DanniT',
     'Danni03@gmail.com',
-    AES_ENCRYPT('DTay2003',@UNHEXEncryptionKey), 
+    AES_ENCRYPT('DTay2003',@UNHEXEncryptionKey),
     'New account for Daniel on the Ebay website'
 )
 ,
@@ -95,7 +95,7 @@ VALUES (
     'Ollie',
     'WyattTheMan',
     'Wyatt01@gmail.com',
-    AES_ENCRYPT('Wyatt012003',@UNHEXEncryptionKey), 
+    AES_ENCRYPT('Wyatt012003',@UNHEXEncryptionKey),
     'New account for Wyatt on the NFL website'
 )
 ,
@@ -106,7 +106,7 @@ VALUES (
     'Santos',
     'LinSan99',
     'LinSan@gmail.com',
-    AES_ENCRYPT('LinSecretPW',@UNHEXEncryptionKey), 
+    AES_ENCRYPT('LinSecretPW',@UNHEXEncryptionKey),
     'New account for Lindsy on the Steam website'
 )
 ,
@@ -117,7 +117,7 @@ VALUES (
     'Jones',
     'KyKy45',
     'KylerJones@gmail.com',
-    AES_ENCRYPT('KylerJ00!',@UNHEXEncryptionKey), 
+    AES_ENCRYPT('KylerJ00!',@UNHEXEncryptionKey),
     'New account for Kyler on the Twitch website'
 )
 ,
@@ -128,7 +128,7 @@ VALUES (
     'Hill',
     'FHill',
     'FrankH@gmail.com',
-    AES_ENCRYPT('FH!@9',@UNHEXEncryptionKey), 
+    AES_ENCRYPT('FH!@9',@UNHEXEncryptionKey),
     'New account for Frank on the HotPocket website'
 )
 ;
