@@ -90,7 +90,7 @@ if ($option != null) {
             </select>
             = <input type="text" name="new-attribute" required> WHERE
             <select name="query-attribute" id="query-attribute">
-                <option>user_id</option>
+                <option>user_id</option>    <!-- This is the dropdown menu options, add the rest of the attributes -->
                 <option>email</option>
             </select>
             = <input type="text" name="pattern" required>
@@ -116,9 +116,9 @@ if ($option != null) {
         <fieldset>
             <legend>Delete</legend>
             DELETE FROM users WHERE
-            <select name="current-attribute" id="current-attribute">
+            <select name="current-attribute" id="current-attribute">  <!-- This is the dropdown menu -->
                 <option>user_id</option>
-                <option>email</option>
+                <option>email</option>  <!-- This is the dropdown menu options, add the rest of the attributes -->
             </select>
             = <input type="text" name="pattern" required>
             <input type="hidden" name="submitted" value="DELETE">

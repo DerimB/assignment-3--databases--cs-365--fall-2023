@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS accounts (
     comment TEXT,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (account_id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (website_id) REFERENCES websites(website_id));
+    UNIQUE KEY unique_user_website (user_id, website_id)
+                                    );
 
 INSERT INTO users (first_name, last_name, email) VALUES
     ('Derim', 'Belica','dbel21@gmail.com'),
