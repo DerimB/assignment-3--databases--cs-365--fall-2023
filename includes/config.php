@@ -3,6 +3,6 @@ const DBNAME = "student_passwords";
 
 const DBHOST = "localhost";
 
-const DBUSER = "User1";
+const DBUSER = "root";
 
-const DBPASS = "user1pw!";
+const DBPASS = "Water123!";
