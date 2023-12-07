@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <title>CRUD Operations via a Web Interface</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -9,9 +9,7 @@
 <header>
     <h1>CRUD Operations via a Web Interface</h1>
 </header>
-<form id="clear-results" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-    <input id="clear-results__submit-button" type="submit" value="Clear Results">
-</form>
+
 
 <?php
 const SEARCH = 'SEARCH';
@@ -27,7 +25,7 @@ $option = (isset($_POST['submitted']) ? $_POST['submitted'] : null);
 if ($option != null) {
     switch ($option) {
         case SEARCH:
-            if ("" == $_POST['search']) {
+            if (empty($_POST['search'])) {
                 echo '<div id="error">Search query empty. Please try again.</div>' . "\n";
             } else {
                 $result = search($_POST['search']);
