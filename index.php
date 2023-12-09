@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>CRUD Operations via a Web Interface</title>
+    <title>Derim's Account/Password Manager</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 <header>
-    <h1>CRUD Operations via a Web Interface</h1>
+    <h1>Derim's Account/Password Manager</h1>
 </header>
-
 
 <?php
 const SEARCH = 'SEARCH';
@@ -21,6 +22,15 @@ require_once "includes/config.php";
 require_once "includes/helpers.php";
 
 $option = (isset($_POST['submitted']) ? $_POST['submitted'] : null);
+
+if (isset($_POST['refresh'])) {
+    $_SESSION['refresh'] = true;
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+}
+if (!isset($_SESSION['refresh'])) {
+    $_SESSION['refresh'] = false;
+}
 
 if ($option != null) {
     switch ($option) {
@@ -36,35 +46,45 @@ if ($option != null) {
             break;
 
         case UPDATE:
-            if ((0 == $_POST['new-attribute']) && ("" == $_POST['pattern'])) {
+            if (empty($_POST['new-attribute']) || empty($_POST['pattern'])) {
                 echo '<div id="error">One or both fields were empty, ' .
                     'but both must be filled out. Please try again.</div>' . "\n";
             } else {
-                update($_POST['current-attribute'], $_POST['new-attribute'],
+                update($_POST['table'], $_POST['current-attribute'], $_POST['new-attribute'],
                     $_POST['query-attribute'], $_POST['pattern']);
             }
             break;
 
         case INSERT:
-            if (("" == $_POST['first_name']) || ("" == $_POST['last_name']) || ("" == $_POST['email'])) {
+            if (empty($_POST['website_name']) || empty($_POST['website_url']) || empty($_POST['username']) || empty($_POST['password']) || empty($_POST['email'])) {
                 echo '<div id="error">At least one field in your insert request ' .
                     'is empty. Please try again.</div>' . "\n";
             } else {
-                insert($_POST['first_name'], $_POST['last_name'], $_POST['email']);
+                insert(
+                    $_POST['website_name'],
+                    $_POST['website_url'],
+                    $_POST['username'],
+                    $_POST['password'],
+                    $_POST['email'],
+                    $_POST['comment']
+                );
             }
             break;
 
         case DELETE:
-            if (("" == $_POST['current-attribute']) || ("" == $_POST['pattern'])) {
-                echo '<div id="error">At least one field in your delete procedure ' .
-                    'is empty. Please try again.</div>' . "\n";
+            if (empty($_POST['website_name'])) {
+                echo '<div id="error">The website name field is empty. Please enter a website name to delete.</div>' . "\n";
             } else {
-                delete($_POST['current-attribute'], $_POST['pattern']);
+                $deleted = delete($_POST['website_name']);
             }
             break;
     }
 }
 ?>
+
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+    <button type="submit" name="refresh">Refresh</button>
+</form>
 
 <section>
     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
@@ -80,18 +100,51 @@ if ($option != null) {
 <section>
     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
         <fieldset>
-            <legend>Update</legend>
-            UPDATE users SET
+            <legend>Update Website</legend>
+            Update
+            <select name="table" id="table">
+                <option value="websites">websites</option>
+            </select>
+            new
             <select name="current-attribute" id="current-attribute">
-                <option>first_name</option>
-                <option>last_name</option>
+                <option value="website_name">website_name</option>
+                <option value="website_url">website_url</option>
             </select>
-            = <input type="text" name="new-attribute" required> WHERE
+            = <input type="text" name="new-attribute" placeholder="New Input" required>
+            where
             <select name="query-attribute" id="query-attribute">
-                <option>user_id</option>    <!-- This is the dropdown menu options, add the rest of the attributes -->
-                <option>email</option>
+                <option value="website_name">website_name</option>
+                <option value="website_url">website_url</option>
             </select>
-            = <input type="text" name="pattern" required>
+            = <input type="text" name="pattern" placeholder="Current Value" required>
+            <input type="hidden" name="submitted" value="UPDATE">
+            <p><input type="submit" value="Update"></p>
+        </fieldset>
+    </form>
+
+    <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+        <fieldset>
+            <legend>Update Account</legend>
+            Update
+            <select name="table" id="table">
+                <option value="accounts">accounts</option>
+            </select>
+            new
+            <select name="current-attribute" id="current-attribute">
+                <option value="username">username</option>
+                <option value="password">password</option>
+                <option value="email">email</option>
+                <option value="comment">comment</option>
+            </select>
+            = <input type="text" name="new-attribute" placeholder="New Input" required>
+            where
+            <select name="query-attribute" id="query-attribute">
+                <option value="username">username</option>
+                <option value="password">password</option>
+                <option value="email">email</option>
+                <option value="comment">comment</option>
+            </select>
+            = <input type="text" name="pattern" placeholder="Current Value" required>
             <input type="hidden" name="submitted" value="UPDATE">
             <p><input type="submit" value="Update"></p>
         </fieldset>
@@ -102,8 +155,27 @@ if ($option != null) {
     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
         <fieldset>
             <legend>Insert</legend>
-            INSERT INTO users VALUES ( <input type="text" name="first_name" placeholder="First Name" required>, <input type="text" name="last_name" placeholder="Last Name" required>, <input type="text" name="email" placeholder="Email" required> );
+
+            <label for="website_name">Website Name:</label>
+            <input type="text" name="website_name" placeholder="Website Name" required>
+
+            <label for="website_url">Website URL:</label>
+            <input type="text" name="website_url" placeholder="Website URL" required>
+
+            <label for="username">Username:</label>
+            <input type="text" name="username" placeholder="Username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" name="password" placeholder="Password" required>
+
+            <label for="email">Email:</label>
+            <input type="email" name="email" placeholder="Email" required>
+
+            <label for="comment">Comment:</label>
+            <textarea name="comment" placeholder="Comment"></textarea>
+
             <input type="hidden" name="submitted" value="INSERT">
+
             <p><input type="submit" value="Insert"></p>
         </fieldset>
     </form>
@@ -112,13 +184,9 @@ if ($option != null) {
 <section>
     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
         <fieldset>
-            <legend>Delete</legend>
-            DELETE FROM users WHERE
-            <select name="current-attribute" id="current-attribute">  <!-- This is the dropdown menu -->
-                <option>user_id</option>
-                <option>email</option>  <!-- This is the dropdown menu options, add the rest of the attributes -->
-            </select>
-            = <input type="text" name="pattern" required>
+            <legend>Delete Account</legend>
+            <label for="website_name">Website Name:</label>
+            <input type="text" name="website_name" placeholder="Website Name" required>
             <input type="hidden" name="submitted" value="DELETE">
             <p><input type="submit" value="Delete"></p>
         </fieldset>
@@ -126,4 +194,5 @@ if ($option != null) {
 </section>
 
 </body>
+
 </html>

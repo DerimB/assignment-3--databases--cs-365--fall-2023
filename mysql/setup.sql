@@ -4,15 +4,11 @@ CREATE DATABASE student_passwords DEFAULT CHARACTER SET utf8mb4;
 
 USE student_passwords;
 
-SET @UNHEXEncryptionKey = UNHEX('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE');
+SET @UNHEXEncryptionKey = UNHEX('8190e34b6ca24e9a6402');
 
-CREATE TABLE IF NOT EXISTS users (
-    user_id INT AUTO_INCREMENT,
-    first_name VARCHAR(32) NOT NULL,
-    last_name VARCHAR(32) NOT NULL,
-    email VARCHAR(32) NOT NULL,
-    PRIMARY KEY (user_id)
-);
+CREATE USER 'passwords_user'@'localhost' IDENTIFIED BY 'password1!';
+
+GRANT ALL PRIVILEGES ON student_passwords.* TO 'passwords_user'@'localhost';
 
 CREATE TABLE IF NOT EXISTS websites (
     website_id INT AUTO_INCREMENT,
@@ -23,48 +19,36 @@ CREATE TABLE IF NOT EXISTS websites (
 
 CREATE TABLE IF NOT EXISTS accounts (
     account_id INT AUTO_INCREMENT,
-    user_id INT NOT NULL,
     website_id INT NOT NULL,
     username VARCHAR(64) NOT NULL,
     password VARBINARY(256) NOT NULL,
+    email VARCHAR(128) NOT NULL,
     comment TEXT,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (account_id),
-    UNIQUE KEY unique_user_website (user_id, website_id)
-                                    );
-
-INSERT INTO users (first_name, last_name, email) VALUES
-    ('Derim', 'Belica','dbel21@gmail.com'),
-    ('John', 'Doe', 'JD21@hartford.edu'),
-    ('Michael', 'Jackson', 'MJ84@yahoo.com'),
-    ('Joel', 'Homer', 'JoeH@gmail.com'),
-    ('Manny', 'Parker', 'ManPark@gmail.com'),
-    ('Daniel', 'Taylor', 'Danni03@gmail.com'),
-    ('Wyatt', 'Ollie', 'Wyatt01@gmail.com'),
-    ('Lindsy', 'Santos', 'LinSan@gmail.com'),
-    ('Kyler', 'Jones', 'KylerJones@gmail.com'),
-    ('Frank', 'Hill', 'FrankH@gmail.com');
+    UNIQUE KEY unique_website_username (website_id, username)
+);
 
 INSERT INTO websites (website_name, website_url) VALUES
-  ('MySQL', 'https://www.mysql.com'),
-  ('UniversityOfHartford', 'https://www.hartford.edu'),
-  ('UselessWebsite', 'http://www.useless.com'),
-  ('FastFoodForMe', 'http://www.fastfoodforme.com'),
-  ('Roblox', 'http://www.roblox.com'),
-  ('Ebay', 'http://www.ebay.com'),
-  ('NFL', 'http://www.nfl.com'),
-  ('Steam', 'http://www.steam.com'),
-  ('Twitch', 'http://www.twitch.com'),
-  ('HotPocket', 'http://www.hotpocket.com');
+    ('MySQL', 'https://www.mysql.com'),
+    ('UniversityOfHartford', 'https://www.hartford.edu'),
+    ('UselessWebsite', 'http://www.useless.com'),
+    ('FastFoodForMe', 'http://www.fastfoodforme.com'),
+    ('Roblox', 'http://www.roblox.com'),
+    ('Ebay', 'http://www.ebay.com'),
+    ('NFL', 'http://www.nfl.com'),
+    ('Steam', 'http://www.steam.com'),
+    ('Twitch', 'http://www.twitch.com'),
+    ('HotPocket', 'http://www.hotpocket.com');
 
-INSERT INTO accounts (user_id, website_id, username, password, comment) VALUES
-  (1, 1, 'dbel21', AES_ENCRYPT('mySQLPassword', @UNHEXEncryptionKey), 'New MySQL account for Derim'),
-  (2, 2, 'JD21', AES_ENCRYPT('myUHARTPassword', @UNHEXEncryptionKey), 'New UHART account for John'),
-  (3, 3, 'MJ84', AES_ENCRYPT('MJpassword', @UNHEXEncryptionKey), 'New account for Michael on the useless website'),
-  (4, 4, 'JoeH', AES_ENCRYPT('fffmJoelPW', @UNHEXEncryptionKey), 'New account for Joel on the fast food for me website'),
-  (5, 5, 'ManPark1998', AES_ENCRYPT('MannyPark1212', @UNHEXEncryptionKey), 'New account for Manny on the Roblox website'),
-  (6, 6, 'DanniT', AES_ENCRYPT('DTay2003', @UNHEXEncryptionKey), 'New account for Daniel on the Ebay website'),
-  (7, 7, 'WyattTheMan', AES_ENCRYPT('Wyatt012003', @UNHEXEncryptionKey), 'New account for Wyatt on the NFL website'),
-  (8, 8, 'LinSan99', AES_ENCRYPT('LinSecretPW', @UNHEXEncryptionKey), 'New account for Lindsy on the Steam website'),
-  (9, 9, 'KyKy45', AES_ENCRYPT('KylerJ00!', @UNHEXEncryptionKey), 'New account for Kyler on the Twitch website'),
-  (10, 10, 'FHill', AES_ENCRYPT('FH!@9', @UNHEXEncryptionKey), 'New account for Frank on the HotPocket website');
+INSERT INTO accounts (website_id, username, password, email, comment) VALUES
+    (1, 'dbel21', AES_ENCRYPT('mySQLPassword', @UNHEXEncryptionKey),'db@gmail.com','New MySQL account'),
+    (2, 'DB21', AES_ENCRYPT('myUHARTPassword', @UNHEXEncryptionKey),'dbel@gmail.com','New UHART account'),
+    (3, 'Dee84', AES_ENCRYPT('84password', @UNHEXEncryptionKey),'derim@gmail.com','New account on the useless website'),
+    (4, 'Bel', AES_ENCRYPT('fffmPW', @UNHEXEncryptionKey),'fffm@gmail.com','New account on the fast food for me website'),
+    (5, 'Derim1998', AES_ENCRYPT('robloxPlayer12!', @UNHEXEncryptionKey),'rblx@gmail.com', 'New account on the Roblox website'),
+    (6, 'DBShop', AES_ENCRYPT('DeEbay', @UNHEXEncryptionKey),'deeee@gmail.com', 'New account on the Ebay website'),
+    (7, 'DFootball', AES_ENCRYPT('footballFan99', @UNHEXEncryptionKey),'brandnew@gmail.com', 'New account on the NFL website'),
+    (8, 'DBGames', AES_ENCRYPT('gamePlayer11', @UNHEXEncryptionKey),'throwaway@gmail.com', 'New account on the Steam website'),
+    (9, 'DeeStreams', AES_ENCRYPT('streamerGuy121', @UNHEXEncryptionKey),'streamer@gmail.com', 'New account on the Twitch website'),
+    (10,'DerimB', AES_ENCRYPT('verySecurePassword', @UNHEXEncryptionKey),'verygood@gmail.com', 'New account on the HotPocket website');
